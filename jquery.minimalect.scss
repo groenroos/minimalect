@@ -63,6 +63,7 @@
 		left: 0;
 		max-height: 22rem;
 		overflow-y: auto;
+		z-index: 999999;
 		
 		li {
 			list-style: none;
@@ -122,7 +123,6 @@
 	background: -o-linear-gradient(top, #ffffff 0%,#f9f9f9 100%);
 	background: -ms-linear-gradient(top, #ffffff 0%,#f9f9f9 100%);
 	background: linear-gradient(to bottom, #ffffff 0%,#f9f9f9 100%);
-	z-index: 30;
 	
 	&:hover {
 		border-color: #dcdcdc;
@@ -137,7 +137,6 @@
 	
 	ul {
 		top: 2.7rem;
-		z-index: 25;
 		-webkit-box-shadow: 0px 5px 25px 0px rgba(0, 0, 0, .25);
 		box-shadow: 0px 5px 25px 0px rgba(0, 0, 0, .25);
 		border-radius: 6px;
