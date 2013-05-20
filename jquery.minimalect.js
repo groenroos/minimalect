@@ -183,7 +183,8 @@
 			// close all other open minimalects
 			var m = this;
 			$("."+op.class_container).each(function(){
-				m.hideChoices($(this), op);
+				if($(this)[0] != wr[0])
+					m.hideChoices($(this), op);
 			});
 			// add the active class and fade in
 			wr.addClass(op.class_active).children("ul").fadeIn(150);
