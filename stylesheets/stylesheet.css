@@ -167,7 +167,7 @@ a.button span {
 
 #demo {
   background: white;
-  padding: 15px 25px;
+  padding: 1px 25px 30px;
   margin: 5px 0 25px;
   text-shadow: none;
 }
@@ -274,6 +274,7 @@ h4 {
 h5 {
   font-size: 1em;
   color: #303030;
+  margin: 25px 0 10px;
 } 
 
 h6 {
