@@ -5,8 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/minimalect.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="javascripts/minimalect.js"></script>
+    <script>
+      $(document).ready(function(){
+        $("#example2").minimalect();
+        $("#example3").minimalect({ theme: "bubble" });
+      });
+    </script>
+    
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -41,7 +52,65 @@
 <li>Filtering choices by typing</li>
 <li>Keyboard navigation</li>
 <li>Support for themes</li>
-</ul><h3>Usage</h3>
+</ul>
+
+<h3>So, what does it look like?</h3>
+
+<div id="column1">
+  <h5>OS Default</h5>
+  <select id="example1">
+    <optgroup label="Swedish Cars">
+      <option value="volvo">Volvo</option>
+      <option value="saab">Saab</option>
+      <option value="scania">Scania</option>
+    </optgroup>
+    <optgroup label="Finnish Cars">
+      <option value="sisu">Sisu</option>
+    </optgroup>
+    <optgroup label="German Cars">
+      <option value="volkswagen">Volkswagen</option>
+      <option value="mercedes">Mercedes</option>
+      <option value="audi">Audi</option>
+      <option value="bmw">BMW</option>
+      <option value="opel">Opel</option>
+      <option value="porsche">Porsche</option>
+    </optgroup>
+  </select>
+</div>
+
+<div id="column2">
+  <h5>Minimalect - Default Theme</h5>
+  <select id="example2">
+    <optgroup label="Swedish Cars">
+      <option value="volvo">Volvo</option>
+      <option value="saab">Saab</option>
+      <option value="scania">Scania</option>
+    </optgroup>
+    <optgroup label="Finnish Cars">
+      <option value="sisu">Sisu</option>
+    </optgroup>
+    <optgroup label="German Cars">
+      <option value="volkswagen">Volkswagen</option>
+      <option value="mercedes">Mercedes</option>
+      <option value="audi">Audi</option>
+      <option value="bmw">BMW</option>
+      <option value="opel">Opel</option>
+      <option value="porsche">Porsche</option>
+    </optgroup>
+  </select>
+</div>
+
+<div id="column3">
+  <h5>Minimalect - "Bubble" Theme</h5>
+  <select id="example3">
+    <option value="cake">Cake</option>
+    <option value="icecream" selected="selected">Ice cream</option>
+    <option value="cookies">Cookies</option>
+    <option value="muffins">Muffins</option>
+  </select>
+</div>
+
+<h3>Usage</h3>
 
 <p>Include <code>jquery.minimalect.min.js</code> after you load jQuery (1.7 or newer). Then simply do;</p>
 
