@@ -40,6 +40,7 @@
 <li>Support for optgroups</li>
 <li>Filtering choices by typing</li>
 <li>Keyboard navigation</li>
+<li>Support for themes</li>
 </ul><h3>Usage</h3>
 
 <p>Include <code>jquery.minimalect.min.js</code> after you load jQuery (1.7 or newer). Then simply do;</p>
@@ -76,10 +77,19 @@
 <code>class_highlighted</code> — classname applied to the list item that is currently highlighted when the user uses keyboard navigation. Default: <em>highlighted</em>
 </li>
 <li>
-<code>placeholder</code> — The default text displayed whenever no choice has been selected. Default: <em>Select a choice</em>
+<code>class_first</code> — classname that corresponds to the first visible list item in the dropdown, including optgroup labels and the "No results" message. Helpful when rounding corners in CSS. Default: <em>minict_first</em>
 </li>
 <li>
-<code>empty</code> — Message displayed to the user when no choice matched his filter search term. Default: <em>No results matched your keyword.</em>
+<code>class_last</code> — classname that corresponds to the last visible list item in the dropdown, including optgroup labels and the "No results" message. Helpful when rounding corners in CSS. Default: <em>minict_last</em>
+</li>
+<li>
+<code>placeholder</code> — the default text displayed whenever no choice has been selected. Default: <em>Select a choice</em>
+</li>
+<li>
+<code>empty</code> — message displayed to the user when no choice matched his filter search term. Default: <em>No results matched your keyword.</em>
+</li>
+<li>
+<code>theme</code> — the currently used theme. Applied as a class to the main div element. Default: <em>(empty)</em>
 </li>
 </ul><h3>Bugs &amp; Support</h3>
 
