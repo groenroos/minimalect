@@ -159,7 +159,7 @@
 		parseElements: function(elhtml) {
 			var readyhtml = "";
 			// go through each option
-			$(elhtml).filter("option").each(function(){
+			$( $.trim(elhtml) ).filter("option").each(function(){
 				// create an li with a data attribute containing its value
 				readyhtml += '<li data-value="'+$(this).val()+'">'+$(this).text()+'</li>';
 			});
