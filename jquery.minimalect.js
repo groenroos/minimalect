@@ -55,7 +55,7 @@
 			// apply the current theme to the wrapper
 			if(this.options.theme) this.wrapper.addClass(this.options.theme);
 			// create and add the input
-			this.wrapper.append('<input type="text" value="'+(this.element.find("option[selected]").html() || "")+'" placeholder="'+(this.element.find("option[selected]").html() || this.options.placeholder)+'" />');            
+			this.wrapper.append('<input type="text" value="'+(this.element.find("option[selected]").html() || "")+'" placeholder="'+(this.element.find("option[selected]").html() || this.options.placeholder)+'" />');         
 
 			var ulcontent = "";
 
@@ -140,15 +140,29 @@
 				if(dr == 'up') {
 					if(wr.find("li:not("+ignored+")").first()[0] != cur[0]) { // if we're not at the first
 						cur.prevAll("li").not(ignored).first().addClass(op.class_highlighted); // highlight the prev
+						// make sure it's visible in a scrollable list
+						var dropdown = wr.children("ul"),
+						offset = wr.find("li."+op.class_highlighted).offset().top - dropdown.offset().top + dropdown.scrollTop();
+						if (dropdown.scrollTop() > offset)
+							dropdown.scrollTop(offset)
 					} else { // if we are at the first
 						wr.find("li:not("+ignored+")").last().addClass(op.class_highlighted); // highlight the last
+						// make sure it's visible in a scrollable list
+						wr.children("ul").scrollTop(wr.children("ul").height());
 					}
 				} else if (dr == 'down') {
 					if(wr.find("li:not("+ignored+")").last()[0] != cur[0]) { // if we're not at the last
 						cur.nextAll("li").not(ignored).first().addClass(op.class_highlighted); // highlight the next
+						// make sure it's visible in a scrollable list
+						var dropdown = wr.children("ul"),
+						ddbottom = dropdown.height(),
+						libottom = wr.find("li."+op.class_highlighted).offset().top - dropdown.offset().top + wr.find("li."+op.class_highlighted).outerHeight();
+						if (ddbottom < libottom)
+							dropdown.scrollTop(dropdown.scrollTop() + libottom - ddbottom)               
 					} else { // if we are at the last
-						console.log("first");
 						wr.find("li:not("+ignored+")").first().addClass(op.class_highlighted); // highlight the first
+						// make sure it's visible in a scrollable list
+						wr.children("ul").scrollTop(0);
 					}
 				}
 			}
@@ -267,7 +281,7 @@
 			el.find("option[selected]").removeAttr("selected");
 			el.find('option[value="'+ch.attr("data-value")+'"]').attr("selected", "selected");
 		},
-
+		
 		// keep the first and last classes up-to-date
 		// vi - whether we want to count visibility or not
 		// wr - jQuery reference for the wrapper
