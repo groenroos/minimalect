@@ -55,7 +55,7 @@
 			// apply the current theme to the wrapper
 			if(this.options.theme) this.wrapper.addClass(this.options.theme);
 			// create and add the input
-			this.wrapper.append('<input type="text" value="'+(this.element.find("option[selected]").html() || "")+'" placeholder="'+this.options.placeholder+'" />');            
+			this.wrapper.append('<input type="text" value="'+(this.element.find("option[selected]").html() || "")+'" placeholder="'+(this.element.find("option[selected]").html() || this.options.placeholder)+'" />');            
 
 			var ulcontent = "";
 
