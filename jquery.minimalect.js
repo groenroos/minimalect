@@ -180,6 +180,11 @@
 		showChoices: function(wr, op){
 			// keep the first and last classes up to date
 			this.updateFirstLast(false, wr, op);
+			// close all other open minimalects
+			var m = this;
+			$("."+op.class_container).each(function(){
+				m.hideChoices($(this), op);
+			});
 			// add the active class and fade in
 			wr.addClass(op.class_active).children("ul").fadeIn(150);
 			// make the input editable
