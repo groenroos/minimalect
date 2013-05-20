@@ -1,0 +1,111 @@
+.minict_wrapper {
+	font-family: "Segoe UI", Segoe, "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+	color: #333;
+	background: #fff;
+	
+	position: relative;
+	width: 300px;
+	height: 2.2rem;
+	
+	border: 1px solid #e5e5e5;
+	border-radius: 3px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box; 
+	
+	* {
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box; 
+	}
+	
+	&:after {
+		content: "\25BC";
+		display: block;
+		position: absolute;
+		height: 2.1rem;
+		width: 2.1rem;
+		top: 0;
+		right: 0;
+		font-size: 0.6rem;
+		line-height: 1.9rem;
+		text-align: center;
+		color: #555;
+	}
+	
+	&.active:after {
+		content: "\25B2";
+	}
+	
+	input {
+		border: 0;
+		outline: none;
+		background: none;
+		font-family: "Segoe UI", Segoe, "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+		color: #333;
+		font-size: 1rem;
+		height: 1.9rem;
+		padding: 0 2.2rem 0 0.4rem;
+		cursor: default;
+		width: 100%;
+	}
+	
+	ul {
+		display: none;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		position: absolute;
+		width: 100%;
+		border: 1px solid #e5e5e5;
+		border-radius: 3px;
+		top: 2rem;
+		left: 0;
+		max-height: 22rem;
+		overflow-y: auto;
+		
+		li {
+			font-size: 1rem;
+			padding: 0 0.7rem;
+			cursor: pointer;
+			background: #fff;
+			height: 2.2rem;
+			line-height: 2rem;
+			
+			&:hover {
+				background: #fcfcfc;
+				color: #111;
+			}
+			
+			&.minict_group {
+				background: #f6f6f6;
+				font-weight: bold;   
+				cursor: default;
+			}
+			
+			&.minict_empty {
+				display: none;
+				background: #fff !important;
+				color: #bbb;
+				text-align: center;
+				font-size: 0.9rem;
+				height: 3.5rem;
+				line-height: 3.3rem;
+			}
+			
+			&.selected {
+				color: #819a9a;
+				background: #f9fcff;
+			}
+			
+			&.highlighted {
+				color: #fff;
+				background: #819a9a;
+			}
+			
+			&.hidden {
+				display: none;
+			}
+		}
+	}
+}
