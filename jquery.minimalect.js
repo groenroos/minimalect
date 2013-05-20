@@ -46,7 +46,7 @@
 
 			// PREPWORK
 			
-			m = this;
+			var m = this;
 
 			// create the wrapper
 			this.wrapper = $('<div class="'+this.options.class_container+'"></div>');
