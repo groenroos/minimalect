@@ -1,4 +1,18 @@
-(function ( $, window, document, undefined ) {
+/************************************
+             MINIMALECT
+  A minimalistic select replacement
+
+ jQuery 1.7+ required.
+ Developed by @groenroos
+ http://www.groenroos.fi
+
+ Github: http://git.io/Xedg9w
+
+ Licensed under the MIT license.
+
+************************************/
+
+;(function ( $, window, document, undefined ) {
 
 	var pluginName = "minimalect",
 	defaults = {
@@ -9,8 +23,11 @@
 		class_selected: "selected", // the currently selected item in the dropdown
 		class_hidden: "hidden", // an item that doesn't match the filter search term
 		class_highlighted: "highlighted", // item highlighted by keyboard navigation
+		class_first: "minict_first", // first visible element
+		class_last: "minict_last", // last visible element
 		placeholder: "Select a choice", // default placeholder when nothing is selected
-		empty: "No results match your keyword." // error message when nothing matches the filter search term
+		empty: "No results match your keyword.", // error message when nothing matches the filter search term
+		theme: "" // name of the theme used
 	};
 
 	// The actual plugin constructor
@@ -35,6 +52,8 @@
 			this.wrapper = $('<div class="'+this.options.class_container+'"></div>');
 			// hide the original select and add the wrapper
 			this.element.hide().after(this.wrapper);
+			// apply the current theme to the wrapper
+			if(this.options.theme) this.wrapper.addClass(this.options.theme);
 			// create and add the input
 			this.wrapper.append('<input type="text" value="'+(this.element.find("option[selected]").html() || "")+'" placeholder="'+this.options.placeholder+'" />');            
 
@@ -159,6 +178,8 @@
 		// wr - jQuery reference for the wrapper
 		// op - options object
 		showChoices: function(wr, op){
+			// keep the first and last classes up to date
+			this.updateFirstLast(false, wr, op);
 			// add the active class and fade in
 			wr.addClass(op.class_active).children("ul").fadeIn(150);
 			// make the input editable
@@ -220,6 +241,9 @@
 			wr.find("."+op.class_empty).hide();
 			if(wr.find("li").not("."+op.class_hidden+", ."+op.class_empty).length == 0)
 				wr.find("."+op.class_empty).show();
+
+			// keep the first and last classes up to date
+			this.updateFirstLast(true, wr, op);
 		},
 
 		// select the choice defined
@@ -236,6 +260,21 @@
 			// update the original select element
 			el.find("option[selected]").removeAttr("selected");
 			el.find('option[value="'+ch.attr("data-value")+'"]').attr("selected", "selected");
+		},
+
+		// keep the first and last classes up-to-date
+		// vi - whether we want to count visibility or not
+		// wr - jQuery reference for the wrapper
+		// op - options object
+		updateFirstLast: function(vi, wr, op){
+			wr.find("."+op.class_first+", ."+op.class_last).removeClass(op.class_first+" "+op.class_last);
+			if(vi) {
+				wr.find("li:visible").first().addClass(op.class_first);
+				wr.find("li:visible").last().addClass(op.class_last);
+			} else {
+				wr.find("li").first().addClass(op.class_first);
+				wr.find("li").not("."+op.class_empty).last().addClass(op.class_last);
+			}
 		}
 	};
 
