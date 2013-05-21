@@ -1,5 +1,5 @@
 /************************************
-             MINIMALECT
+           MINIMALECT 0.8
   A minimalistic select replacement
 
  jQuery 1.7+ required.
@@ -16,6 +16,14 @@
 
 	var pluginName = "minimalect",
 	defaults = {
+		// settings
+		theme: "", // name of the theme used
+
+		// messages
+		placeholder: "Select a choice", // default placeholder when nothing is selected
+		empty: "No results match your keyword.", // error message when nothing matches the filter search term
+
+		// classes
 		class_container: "minict_wrapper", // wrapper div for the element
 		class_group: "minict_group", // list item for an optgroup
 		class_empty: "minict_empty", // "No results" message
@@ -25,9 +33,14 @@
 		class_highlighted: "highlighted", // item highlighted by keyboard navigation
 		class_first: "minict_first", // first visible element
 		class_last: "minict_last", // last visible element
-		placeholder: "Select a choice", // default placeholder when nothing is selected
-		empty: "No results match your keyword.", // error message when nothing matches the filter search term
-		theme: "" // name of the theme used
+
+		// callbacks
+		beforeinit: function(){}, // called before Minimalect is initialized
+		afterinit: function(){}, // called right after Minimalect is initialized
+		onchange: function(){}, // called whenever the user changes the selected value
+		onopen: function(){}, // called when the dropdown is displayed
+		onclose: function(){}, // called when the dropdown is hidden
+		onfilter: function(){} // called every time the filter has been activated
 	};
 
 	// The actual plugin constructor
@@ -44,6 +57,9 @@
 
 		init: function() {
 
+			// before init callback
+			this.options.beforeinit();
+
 			// PREPWORK
 			
 			var m = this;
@@ -55,24 +71,28 @@
 			// apply the current theme to the wrapper
 			if(this.options.theme) this.wrapper.addClass(this.options.theme);
 			// create and add the input
-			this.wrapper.append('<input type="text" value="'+(this.element.find("option[selected]").html() || "")+'" placeholder="'+(this.element.find("option[selected]").html() || this.options.placeholder)+'" />');         
+			this.wrapper.append('<input type="text" value="'+(this.element.find("option[selected]").html() || "")+'" placeholder="'+(this.element.find("option[selected]").html() || this.options.placeholder)+'" />');
 
-			var ulcontent = "";
+			// parse the select itself, and create the dropdown markup
+			this.wrapper.append('<ul>'+m.parseSelect(m.element, m.options)+'<li class="'+m.options.class_empty+'">'+m.options.empty+'</li></ul>');
+			// if it's preselected, select the option itself as well
+			if(this.element.find("option[selected]").length > 0)
+				this.wrapper.find('li[data-value="'+this.element.find("option[selected]").val()+'"]').addClass(m.options.class_selected);
 
-			if( this.element.find("optgroup").length == 0 ) { // if we don't have groups
-				// just parse the elements regularly
-				ulcontent = this.parseElements( this.element.html() );
-			} else { // if we have groups
-				// parse each group separately
-				this.element.find("optgroup").each(function(){
-					// create a group element
-					ulcontent += '<li class="'+m.options.class_group+'">'+$(this).attr("label")+'</li>';
-					// and add its children
-					ulcontent += m.parseElements( $(this).html() );
-				});
-			}
 
-			this.wrapper.append('<ul>'+ulcontent+'<li class="'+m.options.class_empty+'">'+m.options.empty+'</li></ul>');
+			// LISTEN TO THE ORIGINAL FOR CHANGES
+			m.element.on("change", function(){
+				var current = m.wrapper.find("li."+m.options.class_selected),
+					markup = m.parseSelect(m.element, m.options);
+
+				if(m.element.val() != current.attr("data-value")){
+					m.hideChoices(m.wrapper, m.options, function(){
+						m.wrapper.children("ul").html(markup+'<li class="'+m.options.class_empty+'">'+m.options.empty+'</li>');
+						m.selectChoice(m.wrapper.find('li[data-value="'+m.element.val()+'"]'), m.wrapper, m.element, m.options);
+					});
+				}
+			});
+
 
 
 			// BIND EVENTS
@@ -84,9 +104,15 @@
 			// select choice when you click on it
 			this.wrapper.find("li:not(."+m.options.class_group+", ."+m.options.class_empty+")").on("click", function(){ m.selectChoice($(this), m.wrapper, m.element, m.options) });
 			// stop the dropdown from closing when you click on a group or empty placeholder
-			this.wrapper.find("li."+m.options.class_group+", li."+m.options.class_empty).on("click", function(e){ e.stopPropagation(); });
+			this.wrapper.find("li."+m.options.class_group+", li."+m.options.class_empty).on("click", function(e){
+				e.stopPropagation();
+				m.wrapper.children("input").focus();
+			});
 			// key bindings for the input element
-			this.wrapper.find("input").on("keyup", function(e){
+			this.wrapper.find("input").on("focus click", function(e){
+				e.stopPropagation();
+				m.showChoices(m.wrapper, m.options);
+			}).on("keyup", function(e){
 				// keyboard navigation
 				switch(e.keyCode) { 
 					// up
@@ -115,6 +141,9 @@
 				// if we're not navigating, filter
 				m.filterChoices(m.wrapper, m.options)
 			});
+
+			// after init callback
+			this.options.afterinit();
 		},
 
 		// navigate with a keyboard
@@ -142,7 +171,7 @@
 						cur.prevAll("li").not(ignored).first().addClass(op.class_highlighted); // highlight the prev
 						// make sure it's visible in a scrollable list
 						var dropdown = wr.children("ul"),
-						offset = wr.find("li."+op.class_highlighted).offset().top - dropdown.offset().top + dropdown.scrollTop();
+						    offset = wr.find("li."+op.class_highlighted).offset().top - dropdown.offset().top + dropdown.scrollTop();
 						if (dropdown.scrollTop() > offset)
 							dropdown.scrollTop(offset)
 					} else { // if we are at the first
@@ -155,8 +184,8 @@
 						cur.nextAll("li").not(ignored).first().addClass(op.class_highlighted); // highlight the next
 						// make sure it's visible in a scrollable list
 						var dropdown = wr.children("ul"),
-						ddbottom = dropdown.height(),
-						libottom = wr.find("li."+op.class_highlighted).offset().top - dropdown.offset().top + wr.find("li."+op.class_highlighted).outerHeight();
+							ddbottom = dropdown.height(),
+							libottom = wr.find("li."+op.class_highlighted).offset().top - dropdown.offset().top + wr.find("li."+op.class_highlighted).outerHeight();
 						if (ddbottom < libottom)
 							dropdown.scrollTop(dropdown.scrollTop() + libottom - ddbottom)               
 					} else { // if we are at the last
@@ -166,6 +195,26 @@
 					}
 				}
 			}
+		},
+
+		// parse the entire select based on whether it has optgroups or not, and return the new markup
+		// element - jQuery reference to the select
+		// op - options object
+		parseSelect: function(element, op) {
+			var ulcontent = "", m = this;
+			if( element.find("optgroup").length == 0 ) { // if we don't have groups
+				// just parse the elements regularly
+				ulcontent = this.parseElements( element.html() );
+			} else { // if we have groups
+				// parse each group separately
+				element.find("optgroup").each(function(){
+					// create a group element
+					ulcontent += '<li class="'+op.class_group+'">'+$(this).attr("label")+'</li>';
+					// and add its children
+					ulcontent += m.parseElements( $(this).html() );
+				});
+			}
+			return ulcontent;
 		},
 
 		// turn option elements into li elements
@@ -191,44 +240,64 @@
 		// show the dropdown
 		// wr - jQuery reference for the wrapper
 		// op - options object
-		showChoices: function(wr, op){
-			// keep the first and last classes up to date
-			this.updateFirstLast(false, wr, op);
-			// close all other open minimalects
-			var m = this;
-			$("."+op.class_container).each(function(){
-				if($(this)[0] != wr[0])
-					m.hideChoices($(this), op);
-			});
-			// add the active class and fade in
-			wr.addClass(op.class_active).children("ul").fadeIn(150);
-			// make the input editable
-			wr.children("input").val("");
+		// cb - callback before the animation plays
+		showChoices: function(wr, op, cb){
+			if (!wr.hasClass(op.class_active)){
+				// keep the first and last classes up to date
+				this.updateFirstLast(false, wr, op);
+				// close all other open minimalects
+				var m = this;
+				$("."+op.class_container).each(function(){
+					if($(this)[0] != wr[0])
+						m.hideChoices($(this), op);
+				});
+				// internal callback
+				if(typeof cb == 'function') cb.call();
+				// add the active class and fade in
+				wr.addClass(op.class_active).children("ul").fadeIn(150);
+				// make the input editable
+				wr.children("input").val("").focus();
+				// callback
+				this.options.onopen();
+			} else {
+				// internal callback
+				if(typeof cb == 'function') cb.call();
+			}
 		},
 
 		// hide the dropdown
 		// wr - jQuery reference for the wrapper
 		// op - options object
-		hideChoices: function(wr, op){
-			// remove the active class and fade out
-			wr.removeClass(op.class_active).children("ul").fadeOut(100, function(){
-				// reset the filtered elements
-				wr.find("li").removeClass(op.class_hidden);
-				// hide the empty error message
-				wr.find("."+op.class_empty).hide();
-				// reset keyboard navigation
-				wr.find("li."+op.class_highlighted).removeClass(op.class_highlighted);
-			});
+		// cb - callback for after the animation has played
+		hideChoices: function(wr, op, cb){
+			if (wr.hasClass(op.class_active)){
+				// remove the active class and fade out
+				wr.removeClass(op.class_active).children("ul").fadeOut(100, function(){
+					// reset the filtered elements
+					wr.find("li").removeClass(op.class_hidden);
+					// hide the empty error message
+					wr.find("."+op.class_empty).hide();
+					// reset keyboard navigation
+					wr.find("li."+op.class_highlighted).removeClass(op.class_highlighted);
+					// internal callback
+					if(typeof cb == 'function') cb.call();
+				});
 
-			// blur the input
-			wr.children("input").blur();
-			// reset it
-			if(wr.children("input").attr("placeholder") != op.placeholder) {
-				// if we have a previously selected value, restore that
-				wr.children("input").val(wr.children("input").attr("placeholder"));
-			} else if(wr.find("li."+op.class_selected).length == 0) {
-				// if we have no selection, empty it to show placeholder
-				wr.children("input").val("");
+				// blur the input
+				wr.children("input").blur();
+				// reset it
+				if(wr.children("input").attr("placeholder") != op.placeholder) {
+					// if we have a previously selected value, restore that
+					wr.children("input").val(wr.children("input").attr("placeholder"));
+				} else if(wr.find("li."+op.class_selected).length == 0) {
+					// if we have no selection, empty it to show placeholder
+					wr.children("input").val("");
+				}
+				// callback
+				this.options.onclose();
+			} else {
+				// internal callback
+				if(typeof cb == 'function') cb.call();
 			}
 		},
 
@@ -259,8 +328,14 @@
 
 			// show a "no results" placeholder if there's nothing to show
 			wr.find("."+op.class_empty).hide();
-			if(wr.find("li").not("."+op.class_hidden+", ."+op.class_empty).length == 0)
+			if(wr.find("li").not("."+op.class_hidden+", ."+op.class_empty).length == 0) {
 				wr.find("."+op.class_empty).show();
+				// callback, no results found
+				this.options.onfilter(false);
+			} else {
+				// callback, results found
+				this.options.onfilter(true);
+			}
 
 			// keep the first and last classes up to date
 			this.updateFirstLast(true, wr, op);
@@ -280,6 +355,8 @@
 			// update the original select element
 			el.find("option[selected]").removeAttr("selected");
 			el.find('option[value="'+ch.attr("data-value")+'"]').attr("selected", "selected");
+			// callback
+			this.options.onchange(ch.attr("data-value"), ch.text());
 		},
 		
 		// keep the first and last classes up-to-date
