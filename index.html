@@ -111,50 +111,68 @@
 <pre><code>$("select").minimalect();
 </code></pre>
 
-<p>Include the stylesheet (SCSS and minified CSS available) if you wish; the default style is very understated, so it's easy to modify to better suit your needs. By default, no graphics are used; the arrow symbols are Unicode characters. Please be advised that not all typefaces on all devices support this, and depending on your target audience, you may want to replace it with pre-rendered graphics.</p>
+<p>Remember to also include the stylesheet (SCSS and minified CSS available);</p>
+
+<pre><code>&lt;link rel="stylesheet" type="text/css" href="minimalect.min.css" media="screen" /&gt;
+</code></pre>
+
+<p>The default style is very understated, so it's easy to modify to better suit your needs. By default, no graphics are used; the arrow symbols are Unicode characters. Please be advised that not all typefaces on all devices support this, and depending on your target device, you may want to replace it with pre-rendered graphics.</p>
 
 <h4>Available options</h4>
 
+<p>You can pass an object as a parameter for the <code>.minimalect()</code> call, to override the default settings.</p>
+
 <p>You may edit all the CSS classnames that Minimalect uses so that they don't collide with ones you already use, as well as the user-facing messages for customization or internationalization.</p>
 
+<h5>Settings</h5>
+
 <ul>
-<li>
-<code>class_container</code> — classname for the main div element. Default: <em>minict_wrapper</em>
-</li>
-<li>
-<code>class_group</code> — classname for a list item that represents an optgroup label. Default: <em>minict_group</em>
-</li>
-<li>
-<code>class_empty</code> — classname for the "No results" message when filtering produces no results. Default: <em>minict_empty</em>
-</li>
-<li>
-<code>class_active</code> — classname that is applied to the main div element whenever the dropdown is visible. Default: <em>active</em>
-</li>
-<li>
-<code>class_selected</code> — classname applied to the list item in the dropdown that is currently selected. Default: <em>selected</em>
-</li>
-<li>
-<code>class_hidden</code> — classname applied to list items in the dropdown that do not match the filter. Default: <em>hidden</em>
-</li>
-<li>
-<code>class_highlighted</code> — classname applied to the list item that is currently highlighted when the user uses keyboard navigation. Default: <em>highlighted</em>
-</li>
-<li>
-<code>class_first</code> — classname that corresponds to the first visible list item in the dropdown, including optgroup labels and the "No results" message. Helpful when rounding corners in CSS. Default: <em>minict_first</em>
-</li>
-<li>
-<code>class_last</code> — classname that corresponds to the last visible list item in the dropdown, including optgroup labels and the "No results" message. Helpful when rounding corners in CSS. Default: <em>minict_last</em>
-</li>
-<li>
-<code>placeholder</code> — the default text displayed whenever no choice has been selected. Default: <em>Select a choice</em>
-</li>
-<li>
-<code>empty</code> — message displayed to the user when no choice matched his filter search term. Default: <em>No results matched your keyword.</em>
-</li>
-<li>
-<code>theme</code> — the currently used theme. Applied as a class to the main div element. Default: <em>(empty)</em>
-</li>
-</ul><h3>Bugs &amp; Support</h3>
+<li><code>theme</code> &mdash; the currently used theme. Applied as a class to the main div element. Default: <em>(empty)</em></li>
+</ul>
+
+<h5>Messages</h5>
+
+<ul>
+<li><code>placeholder</code> &mdash; the default text displayed whenever no choice has been selected. Default: <em>Select a choice</em></li>
+<li><code>empty</code> &mdash; message displayed to the user when no choice matched his filter search term. Default: <em>No results matched your keyword.</em></li>
+</ul>
+
+<h5>Classes</h5>
+
+<ul>
+<li><code>class_container</code> &mdash; classname for the main div element. Default: <em>minict_wrapper</em></li>
+<li><code>class_group</code> &mdash; classname for a list item that represents an optgroup label. Default: <em>minict_group</em></li>
+<li><code>class_empty</code> &mdash; classname for the "No results" message when filtering produces no results. Default: <em>minict_empty</em></li>
+<li><code>class_active</code> &mdash; classname that is applied to the main div element whenever the dropdown is visible. Default: <em>active</em></li>
+<li><code>class_selected</code> &mdash; classname applied to the list item in the dropdown that is currently selected. Default: <em>selected</em></li>
+<li><code>class_hidden</code> &mdash; classname applied to list items in the dropdown that do not match the filter. Default: <em>hidden</em></li>
+<li><code>class_highlighted</code> &mdash; classname applied to the list item that is currently highlighted when the user uses keyboard navigation. Default: <em>highlighted</em></li>
+<li><code>class_first</code> &mdash; classname that corresponds to the first visible list item in the dropdown, including optgroup labels and the "No results" message. Helpful when rounding corners in CSS. Default: <em>minict_first</em></li>
+<li><code>class_last</code> &mdash; classname that corresponds to the last visible list item in the dropdown, including optgroup labels and the "No results" message. Helpful when rounding corners in CSS. Default: <em>minict_last</em></li>
+</ul>
+
+<h5>Callbacks</h5>
+
+<ul>
+<li><code>beforeinit</code> &mdash; Called immediately when the plugin is called, before any initialization work begins.</li>
+<li><code>afterinit</code> &mdash; Called after Minimalect has been fully initialized.</li>
+<li><code>onchange</code> &mdash; Called whenever the user selects an option in the list.
+<ul><li><code>value</code>; the value of the choice selected.</li>
+<li><code>text</code>; the user-facing text of the choice selected.</li></ul></li>
+<li><code>onopen</code> &mdash; Called when the dropdown list is displayed.</li>
+<li><code>onclose</code> &mdash; Called when the dropdown list is closed (either by clicking away, or by selecting an option).</li>
+<li><code>onfilter</code> &mdash; Called every time the list is filtered (basically every time the user types a letter into the filter box).
+<ul><li><code>match</code>; a boolean parameter, <code>true</code> if there was matches, <code>false</code> if no matches are found.</li></ul></li>
+</ul>
+
+<h4>Programmatically changing the value</h4>
+
+<p>If you wish to change the current value of the select, you can simply make your changes and then trigger the <code>change</code> event, and Minimalect will take it from there. Like so;</p>
+
+<pre><code>$("#myselect").val("newvalue").change();
+</code></pre>
+
+<h3>Bugs &amp; Support</h3>
 
 <p>Developed by <a href="http://twitter.com/groenroos">@groenroos</a>. Please list all bugs and feature requests in the <a href="https://github.com/groenroos/minimalect/issues">Github issue tracker</a>.</p>
 
