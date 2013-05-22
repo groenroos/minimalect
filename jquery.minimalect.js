@@ -1,5 +1,5 @@
 /************************************
-           MINIMALECT 0.8
+          MINIMALECT 0.8b
   A minimalistic select replacement
 
  jQuery 1.7+ required.
@@ -102,9 +102,9 @@
 			// toggle dropdown when you click on the dropdown itself
 			this.wrapper.on("click", function(e){ e.stopPropagation(); m.toggleChoices(m.wrapper, m.options) });
 			// select choice when you click on it
-			this.wrapper.find("li:not(."+m.options.class_group+", ."+m.options.class_empty+")").on("click", function(){ m.selectChoice($(this), m.wrapper, m.element, m.options) });
+			this.wrapper.on("click", "li:not(."+m.options.class_group+", ."+m.options.class_empty+")", function(){ m.selectChoice($(this), m.wrapper, m.element, m.options) });
 			// stop the dropdown from closing when you click on a group or empty placeholder
-			this.wrapper.find("li."+m.options.class_group+", li."+m.options.class_empty).on("click", function(e){
+			this.wrapper.on("click", "li."+m.options.class_group+", li."+m.options.class_empty, function(e){
 				e.stopPropagation();
 				m.wrapper.children("input").focus();
 			});
