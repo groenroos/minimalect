@@ -19,7 +19,6 @@
 		// settings
 		theme: "", // name of the theme used
 		reset: false,
-		reset_class: "reset",
 
 		// messages
 		placeholder: "Select a choice", // default placeholder when nothing is selected
@@ -33,6 +32,7 @@
 		class_selected: "selected", // the currently selected item in the dropdown
 		class_hidden: "hidden", // an item that doesn't match the filter search term
 		class_highlighted: "highlighted", // item highlighted by keyboard navigation
+		class_resetlink: "reset", // class applied to reset link
 		class_first: "minict_first", // first visible element
 		class_last: "minict_last", // last visible element
 
@@ -76,7 +76,7 @@
 			this.wrapper.append('<input type="text" value="'+(this.element.find("option[selected]").html() || "")+'" placeholder="'+(this.element.find("option[selected]").html() || this.options.placeholder)+'" />');
 			// add the reset link, if user has set reset: true
 			if(this.options.reset) {
-				this.resetLink = $('<a href="#" class="'+this.options.reset_class+'">x</a>');
+				this.resetLink = $('<a href="#" class="'+this.options.class_resetlink+'">x</a>');
 				this.resetLink.appendTo(this.wrapper);
 			}
 

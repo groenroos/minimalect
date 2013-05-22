@@ -30,6 +30,7 @@ You may edit all the CSS classnames that Minimalect uses so that they don't coll
 ##### Settings
 
 * `theme` &mdash; the currently used theme. Applied as a class to the main div element. Default: *(empty)*
+* `reset` &mdash; Default: Whether or not to add a reset control to the UI. Default: *(false)*
 
 ##### Messages
 
@@ -45,6 +46,7 @@ You may edit all the CSS classnames that Minimalect uses so that they don't coll
 * `class_selected` &mdash; classname applied to the list item in the dropdown that is currently selected. Default: *selected*
 * `class_hidden` &mdash; classname applied to list items in the dropdown that do not match the filter. Default: *hidden*
 * `class_highlighted` &mdash; classname applied to the list item that is currently highlighted when the user uses keyboard navigation. Default: *highlighted*
+* `class_resetlink` &mdash; classname applied to the reset link. Default: *reset*
 * `class_first` &mdash; classname that corresponds to the first visible list item in the dropdown, including optgroup labels and the "No results" message. Helpful when rounding corners in CSS. Default: *minict_first*
 * `class_last` &mdash; classname that corresponds to the last visible list item in the dropdown, including optgroup labels and the "No results" message. Helpful when rounding corners in CSS. Default: *minict_last*
 
