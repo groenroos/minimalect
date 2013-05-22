@@ -68,6 +68,12 @@ If you wish to change the current value of the select, you can simply make your 
     $("#myselect").val("newvalue").change();
 
 
+### Development
+
+To output minifed CSS after editing the SCSS file, run:
+
+	sass jquery.minimalect.scss jquery.minimalect.min.css --style=compressed
+
 ### Bugs & Support
 
 Developed by [@groenroos](http://twitter.com/groenroos). Please list all bugs and feature requests in the [Github issue tracker](https://github.com/groenroos/minimalect/issues).

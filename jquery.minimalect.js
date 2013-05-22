@@ -18,6 +18,8 @@
 	defaults = {
 		// settings
 		theme: "", // name of the theme used
+		reset: false,
+		reset_class: "reset",
 
 		// messages
 		placeholder: "Select a choice", // default placeholder when nothing is selected
@@ -61,7 +63,7 @@
 			this.options.beforeinit();
 
 			// PREPWORK
-			
+
 			var m = this;
 
 			// create the wrapper
@@ -72,12 +74,19 @@
 			if(this.options.theme) this.wrapper.addClass(this.options.theme);
 			// create and add the input
 			this.wrapper.append('<input type="text" value="'+(this.element.find("option[selected]").html() || "")+'" placeholder="'+(this.element.find("option[selected]").html() || this.options.placeholder)+'" />');
+			// add the reset link, if user has set reset: true
+			if(this.options.reset) {
+				this.resetLink = $('<a href="#" class="'+this.options.reset_class+'">x</a>');
+				this.resetLink.appendTo(this.wrapper);
+			}
 
 			// parse the select itself, and create the dropdown markup
 			this.wrapper.append('<ul>'+m.parseSelect(m.element, m.options)+'<li class="'+m.options.class_empty+'">'+m.options.empty+'</li></ul>');
 			// if it's preselected, select the option itself as well
-			if(this.element.find("option[selected]").length > 0)
+			if(this.element.find("option[selected]").length > 0) {
+				this.showResetLink();
 				this.wrapper.find('li[data-value="'+this.element.find("option[selected]").val()+'"]').addClass(m.options.class_selected);
+			}
 
 
 			// LISTEN TO THE ORIGINAL FOR CHANGES
@@ -85,7 +94,11 @@
 				var current = m.wrapper.find("li."+m.options.class_selected),
 					markup = m.parseSelect(m.element, m.options);
 
-				if(m.element.val() != current.attr("data-value")){
+				if(m.element.val() == null){
+					m.hideChoices(m.wrapper, m.options);
+					m.wrapper.children("input").val("").attr("placeholder", m.options.placeholder);
+					m.hideResetLink();
+				} else if(m.element.val() != current.attr("data-value")) {
 					m.hideChoices(m.wrapper, m.options, function(){
 						m.wrapper.children("ul").html(markup+'<li class="'+m.options.class_empty+'">'+m.options.empty+'</li>');
 						m.selectChoice(m.wrapper.find('li[data-value="'+m.element.val()+'"]'), m.wrapper, m.element, m.options);
@@ -96,7 +109,7 @@
 
 
 			// BIND EVENTS
-			
+
 			// hide dropdown when you click elsewhere
 			$(document).on("click", function(){ m.hideChoices(m.wrapper, m.options) });
 			// toggle dropdown when you click on the dropdown itself
@@ -114,7 +127,7 @@
 				m.showChoices(m.wrapper, m.options);
 			}).on("keyup", function(e){
 				// keyboard navigation
-				switch(e.keyCode) { 
+				switch(e.keyCode) {
 					// up
 					case 38:
 						m.navigateChoices('up', m.wrapper, m.options);
@@ -141,6 +154,8 @@
 				// if we're not navigating, filter
 				m.filterChoices(m.wrapper, m.options)
 			});
+
+			if(this.options.reset) this.resetLink.on("click", $.proxy(m.reset, this));
 
 			// after init callback
 			this.options.afterinit();
@@ -187,7 +202,7 @@
 							ddbottom = dropdown.height(),
 							libottom = wr.find("li."+op.class_highlighted).offset().top - dropdown.offset().top + wr.find("li."+op.class_highlighted).outerHeight();
 						if (ddbottom < libottom)
-							dropdown.scrollTop(dropdown.scrollTop() + libottom - ddbottom)               
+							dropdown.scrollTop(dropdown.scrollTop() + libottom - ddbottom)
 					} else { // if we are at the last
 						wr.find("li:not("+ignored+")").first().addClass(op.class_highlighted); // highlight the first
 						// make sure it's visible in a scrollable list
@@ -355,10 +370,29 @@
 			// update the original select element
 			el.find("option[selected]").removeAttr("selected");
 			el.find('option[value="'+ch.attr("data-value")+'"]').attr("selected", "selected");
+			this.showResetLink();
 			// callback
 			this.options.onchange(ch.attr("data-value"), ch.text());
 		},
-		
+
+		// clear the select
+		reset: function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			this.element.val("").trigger("change");
+		},
+
+		// show the reset link if options.reset is true
+		showResetLink: function() {
+			this.options.reset && this.resetLink.show();
+		},
+
+		// hide the reset link if options.reset is true
+		hideResetLink: function() {
+			this.options.reset && this.resetLink.hide();
+		},
+
 		// keep the first and last classes up-to-date
 		// vi - whether we want to count visibility or not
 		// wr - jQuery reference for the wrapper
