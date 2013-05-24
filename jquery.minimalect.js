@@ -61,7 +61,7 @@
 			this.options.beforeinit();
 
 			// PREPWORK
-			
+
 			var m = this;
 
 			// create the wrapper
@@ -96,7 +96,7 @@
 
 
 			// BIND EVENTS
-			
+
 			// hide dropdown when you click elsewhere
 			$(document).on("click", function(){ m.hideChoices(m.wrapper, m.options) });
 			// toggle dropdown when you click on the dropdown itself
@@ -114,7 +114,7 @@
 				m.showChoices(m.wrapper, m.options);
 			}).on("keyup", function(e){
 				// keyboard navigation
-				switch(e.keyCode) { 
+				switch(e.keyCode) {
 					// up
 					case 38:
 						m.navigateChoices('up', m.wrapper, m.options);
@@ -187,7 +187,7 @@
 							ddbottom = dropdown.height(),
 							libottom = wr.find("li."+op.class_highlighted).offset().top - dropdown.offset().top + wr.find("li."+op.class_highlighted).outerHeight();
 						if (ddbottom < libottom)
-							dropdown.scrollTop(dropdown.scrollTop() + libottom - ddbottom)               
+							dropdown.scrollTop(dropdown.scrollTop() + libottom - ddbottom)
 					} else { // if we are at the last
 						wr.find("li:not("+ignored+")").first().addClass(op.class_highlighted); // highlight the first
 						// make sure it's visible in a scrollable list
@@ -224,7 +224,7 @@
 			// go through each option
 			$( $.trim(elhtml) ).filter("option").each(function(){
 				// create an li with a data attribute containing its value
-				readyhtml += '<li data-value="'+$(this).val()+'">'+$(this).text()+'</li>';
+				readyhtml += '<li data-value="'+$(this).val()+'" class="'+$(this).attr("class")+'">'+$(this).text()+'</li>';
 			});
 			// spit it out
 			return readyhtml;
@@ -358,7 +358,7 @@
 			// callback
 			this.options.onchange(ch.attr("data-value"), ch.text());
 		},
-		
+
 		// keep the first and last classes up-to-date
 		// vi - whether we want to count visibility or not
 		// wr - jQuery reference for the wrapper
