@@ -353,8 +353,8 @@
 			// show it up in the input
 			wr.children("input").val(ch.text()).attr("placeholder", ch.text());
 			// update the original select element
-			el.find("option[selected]").removeAttr("selected");
-			el.find('option[value="'+ch.attr("data-value")+'"]').attr("selected", "selected");
+			el.find("option:selected").prop("selected", false);
+			el.find('option[value="'+ch.attr("data-value")+'"]').prop("selected", true);
 			// callback
 			this.options.onchange(ch.attr("data-value"), ch.text());
 		},
