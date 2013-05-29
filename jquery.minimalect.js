@@ -86,10 +86,21 @@
 					markup = m.parseSelect(m.element, m.options);
 
 				if(m.element.val() != current.attr("data-value")){
-					m.hideChoices(m.wrapper, m.options, function(){
+					var callback = function(){
 						m.wrapper.children("ul").html(markup+'<li class="'+m.options.class_empty+'">'+m.options.empty+'</li>');
 						m.selectChoice(m.wrapper.find('li[data-value="'+m.element.val()+'"]'), m.wrapper, m.element, m.options);
-					});
+					};
+					if (m.element.val() === "") {
+						callback = function(){
+							// A common convention is to have an
+							// empty option in a select list to act
+							// as a place holder. Thus we only want
+							// display an input value if the input
+							// is non-empty
+							m.wrapper.children("input").val('').attr('placeholder', m.options.placeholder);
+						};
+					}
+					m.hideChoices(m.wrapper, m.options, callback);
 				}
 			});
 
@@ -224,9 +235,8 @@
 			// go through each option
 			$( $.trim(elhtml) ).filter("option").each(function(){
 				var $el = $(this);
-				var style = "";
 				if ($el.attr('value') === '') {
-					style = "display: none;";
+					return;
 				}
 
 				var classes = "";
@@ -235,7 +245,7 @@
 				}
 
 				// create an li with a data attribute containing its value
-				readyhtml += '<li data-value="'+$el.val()+'" class="'+classes+'" style="' + style + '">'+$el.text()+'</li>';
+				readyhtml += '<li data-value="'+$el.val()+'" class="'+classes+'">'+$el.text()+'</li>';
 			});
 			// spit it out
 			return readyhtml;
@@ -363,18 +373,7 @@
 			ch.addClass(op.class_selected);
 
 			// show it up in the input
-			var input = wr.children("input");
-			// A common convention is to have an
-			// empty option in a select list to act
-			// as a place holder. Thus we only want
-			// display an input value if the input
-			// is non-empty
-			if (ch.attr("data-value")) {
-				input.val(ch.text());
-			} else {
-				input.val('');
-			}
-			input.attr("placeholder", ch.text());
+			wr.children("input").val(ch.text()).attr("placeholder", ch.text());
 
 			// update the original select element
 			el.find("option:selected").prop("selected", false);
