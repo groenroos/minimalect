@@ -239,13 +239,8 @@
 					return;
 				}
 
-				var classes = "";
-				if ($el.attr("class")) {
-					classes=$el.attr("class");
-				}
-
 				// create an li with a data attribute containing its value
-				readyhtml += '<li data-value="'+$el.val()+'" class="'+classes+'">'+$el.text()+'</li>';
+				readyhtml += '<li data-value="'+$el.val()+'" class="'+($el.attr("class") || "")+'">'+$el.text()+'</li>';
 			});
 			// spit it out
 			return readyhtml;
