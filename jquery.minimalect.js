@@ -86,21 +86,19 @@
 					markup = m.parseSelect(m.element, m.options);
 
 				if(m.element.val() != current.attr("data-value")){
-					var callback = function(){
-						m.wrapper.children("ul").html(markup+'<li class="'+m.options.class_empty+'">'+m.options.empty+'</li>');
-						m.selectChoice(m.wrapper.find('li[data-value="'+m.element.val()+'"]'), m.wrapper, m.element, m.options);
-					};
-					if (m.element.val() === "") {
-						callback = function(){
+					m.hideChoices(m.wrapper, m.options, function() {
+						if (m.element.val() === "") {
 							// A common convention is to have an
 							// empty option in a select list to act
 							// as a place holder. Thus we only want
 							// display an input value if the input
 							// is non-empty
 							m.wrapper.children("input").val('').attr('placeholder', m.options.placeholder);
-						};
-					}
-					m.hideChoices(m.wrapper, m.options, callback);
+						} else {
+							m.wrapper.children("ul").html(markup+'<li class="'+m.options.class_empty+'">'+m.options.empty+'</li>');
+							m.selectChoice(m.wrapper.find('li[data-value="'+m.element.val()+'"]'), m.wrapper, m.element, m.options);
+						}
+					});
 				}
 			});
 
@@ -235,10 +233,7 @@
 			// go through each option
 			$( $.trim(elhtml) ).filter("option").each(function(){
 				var $el = $(this);
-				if ($el.attr('value') === '') {
-					return;
-				}
-
+				if ($el.attr('value') === '') return;
 				// create an li with a data attribute containing its value
 				readyhtml += '<li data-value="'+$el.val()+'" class="'+($el.attr("class") || "")+'">'+$el.text()+'</li>';
 			});
