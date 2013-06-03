@@ -86,9 +86,18 @@
 					markup = m.parseSelect(m.element, m.options);
 
 				if(m.element.val() != current.attr("data-value")){
-					m.hideChoices(m.wrapper, m.options, function(){
-						m.wrapper.children("ul").html(markup+'<li class="'+m.options.class_empty+'">'+m.options.empty+'</li>');
-						m.selectChoice(m.wrapper.find('li[data-value="'+m.element.val()+'"]'), m.wrapper, m.element, m.options);
+					m.hideChoices(m.wrapper, m.options, function() {
+						if (m.element.val() === "") {
+							// A common convention is to have an
+							// empty option in a select list to act
+							// as a place holder. Thus we only want
+							// display an input value if the input
+							// is non-empty
+							m.wrapper.children("input").val('').attr('placeholder', m.options.placeholder);
+						} else {
+							m.wrapper.children("ul").html(markup+'<li class="'+m.options.class_empty+'">'+m.options.empty+'</li>');
+							m.selectChoice(m.wrapper.find('li[data-value="'+m.element.val()+'"]'), m.wrapper, m.element, m.options);
+						}
 					});
 				}
 			});
@@ -223,8 +232,10 @@
 			var readyhtml = "";
 			// go through each option
 			$( $.trim(elhtml) ).filter("option").each(function(){
+				var $el = $(this);
+				if ($el.attr('value') === '') return;
 				// create an li with a data attribute containing its value
-				readyhtml += '<li data-value="'+$(this).val()+'" class="'+$(this).attr("class")+'">'+$(this).text()+'</li>';
+				readyhtml += '<li data-value="'+$el.val()+'" class="'+($el.attr("class") || "")+'">'+$el.text()+'</li>';
 			});
 			// spit it out
 			return readyhtml;
@@ -350,8 +361,10 @@
 			// apply the selected class
 			wr.find("li").removeClass(op.class_selected);
 			ch.addClass(op.class_selected);
+
 			// show it up in the input
 			wr.children("input").val(ch.text()).attr("placeholder", ch.text());
+
 			// update the original select element
 			el.find("option:selected").prop("selected", false);
 			el.find('option[value="'+ch.attr("data-value")+'"]').prop("selected", true);
