@@ -18,6 +18,7 @@
 	defaults = {
 		// settings
 		theme: "", // name of the theme used
+		transition: "fade",
 
 		// messages
 		placeholder: "Select a choice", // default placeholder when nothing is selected
@@ -264,8 +265,16 @@
 				});
 				// internal callback
 				if(typeof cb == 'function') cb.call();
-				// add the active class and fade in
-				wr.addClass(op.class_active).children("ul").fadeIn(150);
+				// add the active class
+				wr.addClass(op.class_active);
+				switch(op.transition) {
+					case "fade":
+					wr.children("ul").fadeIn(150);
+					break;
+					default:
+					wr.children("ul").show();
+					break;
+				}
 				// make the input editable
 				wr.children("input").val("").focus();
 				// callback
@@ -275,6 +284,17 @@
 				if(typeof cb == 'function') cb.call();
 			}
 		},
+		
+		resetDropdown: function(wr, op, cb){
+			// reset the filtered elements
+			wr.find("li").removeClass(op.class_hidden);
+			// hide the empty error message
+			wr.find("."+op.class_empty).hide();
+			// reset keyboard navigation
+			wr.find("li."+op.class_highlighted).removeClass(op.class_highlighted);
+			// internal callback
+			if(typeof cb == 'function') cb.call();
+		},
 
 		// hide the dropdown
 		// wr - jQuery reference for the wrapper
@@ -283,17 +303,19 @@
 		hideChoices: function(wr, op, cb){
 			if (wr.hasClass(op.class_active)){
 				// remove the active class and fade out
-				wr.removeClass(op.class_active).children("ul").fadeOut(100, function(){
-					// reset the filtered elements
-					wr.find("li").removeClass(op.class_hidden);
-					// hide the empty error message
-					wr.find("."+op.class_empty).hide();
-					// reset keyboard navigation
-					wr.find("li."+op.class_highlighted).removeClass(op.class_highlighted);
-					// internal callback
-					if(typeof cb == 'function') cb.call();
-				});
-
+				wr.removeClass(op.class_active);
+				
+				switch(op.transition) {
+					case "fade":
+					wr.children("ul").fadeOut(100);
+					break;
+					default:
+					wr.children("ul").hide();
+					break;
+				}
+				
+				this.resetDropdown(wr, op, cb); 
+				
 				// blur the input
 				wr.children("input").blur();
 				// reset it
