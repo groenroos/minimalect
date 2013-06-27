@@ -50,6 +50,7 @@
 		this.options = $.extend( {}, defaults, options );
 		this._defaults = defaults;
 		this._name = pluginName;
+		this.label = $('[for="'+this.element.attr('id')+'"]').attr('for', 'minict_'+this.element.attr('id'));
 
 		this.init();
 	}
@@ -111,6 +112,8 @@
 			$(document).on("click", function(){ m.hideChoices(m.wrapper, m.options) });
 			// toggle dropdown when you click on the dropdown itself
 			this.wrapper.on("click", function(e){ e.stopPropagation(); m.toggleChoices(m.wrapper, m.options) });
+			// toggle dropdown when you click on the associated label, if present
+			m.label.on("click", function(e){ e.stopPropagation(); m.wrapper.find("input").trigger('focus') });
 			// select choice when you click on it
 			this.wrapper.on("click", "li:not(."+m.options.class_group+", ."+m.options.class_empty+")", function(){ m.selectChoice($(this), m.wrapper, m.element, m.options) });
 			// stop the dropdown from closing when you click on a group or empty placeholder
