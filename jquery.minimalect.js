@@ -125,7 +125,7 @@
 			this.wrapper.find("input").on("focus click", function(e){
 				e.stopPropagation();
 				m.showChoices(m.wrapper, m.options);
-			}).on("keyup", function(e){
+			}).on("keydown", function(e){
 				// keyboard navigation
 				switch(e.keyCode) {
 					// up
