@@ -50,6 +50,7 @@
 		this.options = $.extend( {}, defaults, options );
 		this._defaults = defaults;
 		this._name = pluginName;
+		this.label = $('[for="'+this.element.attr('id')+'"]').attr('for', 'minict_'+this.element.attr('id'));
 
 		this.init();
 	}
@@ -72,7 +73,7 @@
 			// apply the current theme to the wrapper
 			if(this.options.theme) this.wrapper.addClass(this.options.theme);
 			// create and add the input
-			this.wrapper.append('<input type="text" value="'+(this.element.find("option[selected]").html() || "")+'" placeholder="'+(this.element.find("option[selected]").html() || this.options.placeholder)+'" />');
+			this.wrapper.append('<input type="text" value="'+(this.element.find("option[selected]").html() || "")+'" placeholder="'+(this.element.find("option[selected]").html() || this.options.placeholder)+'" '+ (this.element.is('[tabindex]') ? ('tabindex='+this.element.attr('tabindex')) : '') +' />');
 
 			// parse the select itself, and create the dropdown markup
 			this.wrapper.append('<ul>'+m.parseSelect(m.element, m.options)+'<li class="'+m.options.class_empty+'">'+m.options.empty+'</li></ul>');
@@ -111,6 +112,8 @@
 			$(document).on("click", function(){ m.hideChoices(m.wrapper, m.options) });
 			// toggle dropdown when you click on the dropdown itself
 			this.wrapper.on("click", function(e){ e.stopPropagation(); m.toggleChoices(m.wrapper, m.options) });
+			// toggle dropdown when you click on the associated label, if present
+			m.label.on("click", function(e){ e.stopPropagation(); m.wrapper.find("input").trigger('focus') });
 			// select choice when you click on it
 			this.wrapper.on("click", "li:not(."+m.options.class_group+", ."+m.options.class_empty+")", function(){ m.selectChoice($(this), m.wrapper, m.element, m.options) });
 			// stop the dropdown from closing when you click on a group or empty placeholder
@@ -122,7 +125,7 @@
 			this.wrapper.find("input").on("focus click", function(e){
 				e.stopPropagation();
 				m.showChoices(m.wrapper, m.options);
-			}).on("keyup", function(e){
+			}).on("keydown", function(e){
 				// keyboard navigation
 				switch(e.keyCode) {
 					// up
@@ -150,6 +153,11 @@
 				}
 				// if we're not navigating, filter
 				m.filterChoices(m.wrapper, m.options)
+			});
+
+			// When tabbing out of minimalect, close it
+			$('input, select, button, textarea, a').not(m.wrapper.find("input")).on('focus', function(){
+				m.hideChoices(m.wrapper, m.options);
 			});
 
 			// after init callback
