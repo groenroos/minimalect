@@ -155,6 +155,11 @@
 				m.filterChoices(m.wrapper, m.options)
 			});
 
+			// When tabbing out of minimalect, close it
+			$('input, select, button, textarea, a').not(m.wrapper.find("input")).on('focus', function(){
+				m.hideChoices(m.wrapper, m.options);
+			});
+
 			// after init callback
 			this.options.afterinit();
 		},
