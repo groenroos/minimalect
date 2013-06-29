@@ -73,7 +73,7 @@
 			// apply the current theme to the wrapper
 			if(this.options.theme) this.wrapper.addClass(this.options.theme);
 			// create and add the input
-			this.wrapper.append('<input type="text" value="'+(this.element.find("option[selected]").html() || "")+'" placeholder="'+(this.element.find("option[selected]").html() || this.options.placeholder)+'" '+ (this.element.is('[tabindex]') ? ('tabindex='+this.element.attr('tabindex')) : '') +' />');
+			m.input = $('<input type="text" value="'+(this.element.find("option[selected]").html() || "")+'" placeholder="'+(this.element.find("option[selected]").html() || this.options.placeholder)+'" '+ (this.element.is('[tabindex]') ? ('tabindex='+this.element.attr('tabindex')) : '') +' />').appendTo(this.wrapper);
 
 			// parse the select itself, and create the dropdown markup
 			this.wrapper.append('<ul>'+m.parseSelect(m.element, m.options)+'<li class="'+m.options.class_empty+'">'+m.options.empty+'</li></ul>');
@@ -95,7 +95,7 @@
 							// as a place holder. Thus we only want
 							// display an input value if the input
 							// is non-empty
-							m.wrapper.children("input").val('').attr('placeholder', m.options.placeholder);
+							m.input.val('').attr('placeholder', m.options.placeholder);
 						} else {
 							m.wrapper.children("ul").html(markup+'<li class="'+m.options.class_empty+'">'+m.options.empty+'</li>');
 							m.selectChoice(m.wrapper.find('li[data-value="'+m.element.val()+'"]'), m.wrapper, m.element, m.options);
@@ -113,16 +113,16 @@
 			// toggle dropdown when you click on the dropdown itself
 			this.wrapper.on("click", function(e){ e.stopPropagation(); m.toggleChoices(m.wrapper, m.options) });
 			// toggle dropdown when you click on the associated label, if present
-			m.label.on("click", function(e){ e.stopPropagation(); m.wrapper.find("input").trigger('focus') });
+			m.label.on("click", function(e){ e.stopPropagation(); m.input.trigger('focus') });
 			// select choice when you click on it
 			this.wrapper.on("click", "li:not(."+m.options.class_group+", ."+m.options.class_empty+")", function(){ m.selectChoice($(this), m.wrapper, m.element, m.options) });
 			// stop the dropdown from closing when you click on a group or empty placeholder
 			this.wrapper.on("click", "li."+m.options.class_group+", li."+m.options.class_empty, function(e){
 				e.stopPropagation();
-				m.wrapper.children("input").focus();
+				m.input.focus();
 			});
 			// key bindings for the input element
-			this.wrapper.find("input").on("focus click", function(e){
+			this.input.on("focus click", function(e){
 				e.stopPropagation();
 				m.showChoices(m.wrapper, m.options);
 			}).on("keydown", function(e){
@@ -156,7 +156,7 @@
 			});
 
 			// When tabbing out of minimalect, close it
-			$('input, select, button, textarea, a').not(m.wrapper.find("input")).on('focus', function(){
+			$('input, select, button, textarea, a').not(m.input).on('focus', function(){
 				m.hideChoices(m.wrapper, m.options);
 			});
 
@@ -284,7 +284,7 @@
 					break;
 				}
 				// make the input editable
-				wr.children("input").val("").focus();
+				this.input.val("").focus();
 				// callback
 				this.options.onopen();
 			} else {
@@ -325,14 +325,14 @@
 				this.resetDropdown(wr, op, cb); 
 				
 				// blur the input
-				wr.children("input").blur();
+				this.input.blur();
 				// reset it
-				if(wr.children("input").attr("placeholder") != op.placeholder) {
+				if(this.input.attr("placeholder") != op.placeholder) {
 					// if we have a previously selected value, restore that
-					wr.children("input").val(wr.children("input").attr("placeholder"));
+					this.input.val(this.input.attr("placeholder"));
 				} else if(wr.find("li."+op.class_selected).length == 0) {
 					// if we have no selection, empty it to show placeholder
-					wr.children("input").val("");
+					this.input.val("");
 				}
 				// callback
 				this.options.onclose();
@@ -347,7 +347,7 @@
 		// op - options object
 		filterChoices: function(wr, op){
 			// get the filter value
-			var filter = wr.children("input").val();
+			var filter = this.input.val();
 			// reset keyboard navigation
 			wr.find("li."+op.class_highlighted).removeClass(op.class_highlighted);
 
@@ -393,7 +393,7 @@
 			ch.addClass(op.class_selected);
 
 			// show it up in the input
-			wr.children("input").val(ch.text()).attr("placeholder", ch.text());
+			this.input.val(ch.text()).attr("placeholder", ch.text());
 
 			// update the original select element
 			el.find("option:selected").prop("selected", false);
