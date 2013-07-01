@@ -19,6 +19,7 @@
 		// settings
 		theme: "", // name of the theme used
 		transition: "fade",
+		remove_empty_option: true,
 
 		// messages
 		placeholder: "Select a choice", // default placeholder when nothing is selected
@@ -222,14 +223,14 @@
 			var ulcontent = "", m = this;
 			if( element.find("optgroup").length == 0 ) { // if we don't have groups
 				// just parse the elements regularly
-				ulcontent = this.parseElements( element.html() );
+				ulcontent = this.parseElements( element.html(), op );
 			} else { // if we have groups
 				// parse each group separately
 				element.find("optgroup").each(function(){
 					// create a group element
 					ulcontent += '<li class="'+op.class_group+'">'+$(this).attr("label")+'</li>';
 					// and add its children
-					ulcontent += m.parseElements( $(this).html() );
+					ulcontent += m.parseElements( $(this).html(), op );
 				});
 			}
 			return ulcontent;
@@ -237,12 +238,12 @@
 
 		// turn option elements into li elements
 		// elhtml - HTML containing the options
-		parseElements: function(elhtml) {
+		parseElements: function(elhtml, op) {
 			var readyhtml = "";
 			// go through each option
 			$( $.trim(elhtml) ).filter("option").each(function(){
 				var $el = $(this);
-				if ($el.attr('value') === '') return;
+				if ($el.attr('value') === '' && op.remove_empty_option) return;
 				// create an li with a data attribute containing its value
 				readyhtml += '<li data-value="'+$el.val()+'" class="'+($el.attr("class") || "")+'">'+$el.text()+'</li>';
 			});
@@ -393,7 +394,13 @@
 			ch.addClass(op.class_selected);
 
 			// show it up in the input
-			this.input.val(ch.text()).attr("placeholder", ch.text());
+			if(!ch.data('value')){
+				// empty value = reset to placeholder
+				this.input.val('').attr("placeholder", op.placeholder);
+			}else{
+				// new value
+				this.input.val(ch.text()).attr("placeholder", ch.text());
+			}
 
 			// update the original select element
 			el.find("option:selected").prop("selected", false);
