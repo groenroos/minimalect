@@ -397,11 +397,15 @@
 				this.input.val(ch.text()).attr("placeholder", ch.text());
 			}
 
-			// update the original select element
-			el.find("option:selected").prop("selected", false);
-			el.find('option[value="'+ch.data("value")+'"]').prop("selected", true);
-			// call original select change event
-			el.trigger('change');
+			// if the selected choice is different
+			if(el.find('option:selected').val() != ch.data('value')){
+				// update the original select element
+				el.find("option:selected").prop("selected", false);
+				el.find('option[value="'+ch.data("value")+'"]').prop("selected", true);
+				// call original select change event
+				el.trigger('change');
+			}
+
 			// callback
 			this.options.onchange(ch.data("value"), ch.text());
 		},
