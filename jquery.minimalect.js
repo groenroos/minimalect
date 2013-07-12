@@ -143,7 +143,7 @@
 						if(m.items.filter("."+m.options.class_highlighted).length)
 							m.selectChoice(m.items.filter("."+m.options.class_highlighted));
 						else
-							m.selectChoice(m.items.not("."+m.options.class_group+", ."+m.options.class_empty).first());
+							m.selectChoice(m.items.not("."+m.options.class_group+", ."+m.options.class_empty).filter(':visible').first());
 
 					// hide the dropdown
 					m.hideChoices(m.wrapper);
