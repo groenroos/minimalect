@@ -150,8 +150,11 @@
 					return false;
 					break;
 				}
+			}).on("keyup", function(e){
 				// if we're not navigating, filter
-				m.filterChoices();
+				if($.inArray(e.keyCode, [38, 40, 13]) === -1){
+					m.filterChoices();
+				}
 			});
 
 			// When tabbing out of minimalect, close it
