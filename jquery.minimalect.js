@@ -139,11 +139,15 @@
 						break;
 					// enter
 					case 13:
-						// select the highlighted choice, or if there is none, select the first choice
+					// tab
+					case 9:
+						// select the highlighted choice
 						if(m.items.filter("."+m.options.class_highlighted).length)
 							m.selectChoice(m.items.filter("."+m.options.class_highlighted));
-						else
+						// or if there is none, select the first choice after filtering
+						else if(m.input.val())
 							m.selectChoice(m.items.not("."+m.options.class_group+", ."+m.options.class_empty).filter(':visible').first());
+						break;
 
 					// hide the dropdown
 					m.hideChoices(m.wrapper);
