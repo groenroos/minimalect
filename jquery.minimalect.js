@@ -130,12 +130,10 @@
 					// up
 					case 38:
 						m.navigateChoices('up');
-						return false;
 						break;
 					// down
 					case 40:
 						m.navigateChoices('down');
-						return false;
 						break;
 					// enter
 					case 13:
@@ -148,15 +146,15 @@
 						else if(m.input.val())
 							m.selectChoice(m.items.not("."+m.options.class_group+", ."+m.options.class_empty).filter(':visible').first());
 						break;
-
-					// hide the dropdown
-					m.hideChoices(m.wrapper);
-					return false;
-					break;
+					// escape
+					case 27:
+						// close the select and don't change the value
+						m.hideChoices(m.wrapper);
+						break;
 				}
 			}).on("keyup", function(e){
 				// if we're not navigating, filter
-				if($.inArray(e.keyCode, [38, 40, 13]) === -1){
+				if($.inArray(e.keyCode, [38, 40, 13, 9, 27]) === -1){
 					m.filterChoices();
 				}
 			});
