@@ -147,7 +147,6 @@
 						else if(m.input.val()){
 							m.selectChoice(m.items.not("."+m.options.class_group+", ."+m.options.class_empty).filter(':visible').first());
 						}
-						m.hideChoices(m.wrapper);
 						break;
 					// escape
 					case 27:
@@ -163,7 +162,8 @@
 			});
 
 			// When tabbing out of minimalect, close it
-			$('input, select, button, textarea, a').not(m.input).on('focus', function(){
+			$('*').not(m.input).on('focus', function(){
+				console.log('other focus');
 				m.hideChoices(m.wrapper);
 			});
 
