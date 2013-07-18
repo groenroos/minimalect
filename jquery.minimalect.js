@@ -140,11 +140,14 @@
 					// tab
 					case 9:
 						// select the highlighted choice
-						if(m.items.filter("."+m.options.class_highlighted).length)
+						if(m.items.filter("."+m.options.class_highlighted).length){
 							m.selectChoice(m.items.filter("."+m.options.class_highlighted));
+						}
 						// or if there is none, select the first choice after filtering
-						else if(m.input.val())
+						else if(m.input.val()){
 							m.selectChoice(m.items.not("."+m.options.class_group+", ."+m.options.class_empty).filter(':visible').first());
+						}
+						m.hideChoices(m.wrapper);
 						break;
 					// escape
 					case 27:
