@@ -163,7 +163,6 @@
 
 			// When tabbing out of minimalect, close it
 			$('*').not(m.input).on('focus', function(){
-				console.log('other focus');
 				m.hideChoices(m.wrapper);
 			});
 
