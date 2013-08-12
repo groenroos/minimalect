@@ -109,6 +109,8 @@
 			// BIND EVENTS
 			// hide dropdown when you click elsewhere
 			$(document).on("click", function(){ m.hideChoices(m.wrapper) });
+			// hide dropdown when moving focus outside it
+			$("*").not(m.wrapper).not(m.wrapper.find('*')).on("focus", function(){ m.hideChoices(m.wrapper) });
 			// toggle dropdown when you click on the dropdown itself
 			this.wrapper.on("click", function(e){ e.stopPropagation(); m.toggleChoices() });
 			// toggle dropdown when you click on the associated label, if present
@@ -140,12 +142,14 @@
 					// tab
 					case 9:
 						// select the highlighted choice
-						if(m.items.filter("."+m.options.class_highlighted).length){
+						if(m.items.filter("."+m.options.class_highlighted).length)
 							m.selectChoice(m.items.filter("."+m.options.class_highlighted));
-						}
 						// or if there is none, select the first choice after filtering
-						else if(m.input.val()){
+						else if(m.input.val())
 							m.selectChoice(m.items.not("."+m.options.class_group+", ."+m.options.class_empty).filter(':visible').first());
+						if(e.keyCode===13){
+							e.preventDefault();
+							m.hideChoices(m.wrapper);
 						}
 						break;
 					// escape
@@ -159,11 +163,6 @@
 				if($.inArray(e.keyCode, [38, 40, 13, 9, 27]) === -1){
 					m.filterChoices();
 				}
-			});
-
-			// When tabbing out of minimalect, close it
-			$('*').not(m.input).on('focus', function(){
-				m.hideChoices(m.wrapper);
 			});
 
 			// after init callback
