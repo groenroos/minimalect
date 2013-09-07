@@ -109,6 +109,8 @@
 			// BIND EVENTS
 			// hide dropdown when you click elsewhere
 			$(document).on("click", function(){ m.hideChoices(m.wrapper) });
+			// hide dropdown when moving focus outside it
+			$("*").not(m.wrapper).not(m.wrapper.find('*')).on("focus", function(){ m.hideChoices(m.wrapper) });
 			// toggle dropdown when you click on the dropdown itself
 			this.wrapper.on("click", function(e){ e.stopPropagation(); m.toggleChoices() });
 			// toggle dropdown when you click on the associated label, if present
@@ -130,33 +132,37 @@
 					// up
 					case 38:
 						m.navigateChoices('up');
-						return false;
 						break;
 					// down
 					case 40:
 						m.navigateChoices('down');
-						return false;
 						break;
 					// enter
 					case 13:
-						// select the highlighted choice, or if there is none, select the first choice
+					// tab
+					case 9:
+						// select the highlighted choice
 						if(m.items.filter("."+m.options.class_highlighted).length)
 							m.selectChoice(m.items.filter("."+m.options.class_highlighted));
-						else
-							m.selectChoice(m.items.not("."+m.options.class_group+", ."+m.options.class_empty).first());
-
-					// hide the dropdown
-					m.hideChoices(m.wrapper);
-					return false;
-					break;
+						// or if there is none, select the first choice after filtering
+						else if(m.input.val())
+							m.selectChoice(m.items.not("."+m.options.class_group+", ."+m.options.class_empty).filter(':visible').first());
+						if(e.keyCode===13){
+							e.preventDefault();
+							m.hideChoices(m.wrapper);
+						}
+						break;
+					// escape
+					case 27:
+						// close the select and don't change the value
+						m.hideChoices(m.wrapper);
+						break;
 				}
+			}).on("keyup", function(e){
 				// if we're not navigating, filter
-				m.filterChoices();
-			});
-
-			// When tabbing out of minimalect, close it
-			$('input, select, button, textarea, a').not(m.input).on('focus', function(){
-				m.hideChoices(m.wrapper);
+				if($.inArray(e.keyCode, [38, 40, 13, 9, 27]) === -1){
+					m.filterChoices();
+				}
 			});
 
 			// after init callback
