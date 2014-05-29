@@ -1,6 +1,6 @@
 {
   "name": "minimalect",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "main": "jquery.minimalect.js",
   "ignore": [
     "Gruntfile.js",

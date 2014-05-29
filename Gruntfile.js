@@ -2,7 +2,7 @@
   minimalect
   http://github.com/groenroos/minimalect
 
-  Copyright (c) 2013 Oskari Groenroos and contributors
+  Copyright (c) 2013-2014 Oskari Groenroos and contributors
   Licensed under the MIT license.
 */
 
