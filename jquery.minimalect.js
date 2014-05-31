@@ -354,7 +354,7 @@
 				// close all other open minimalects
 				$("."+op.class_container).each(function(){ //todo this doesn't work if the container classes are different
 					if($(this)[0] !== wr[0])
-						this._hideChoices($(this));
+						m._hideChoices($(this));
 				});
 				// internal callback
 				if(typeof cb === 'function') cb.call();
