@@ -314,9 +314,9 @@
 				// parse each group separately
 				this.element.find("optgroup").each(function(){
 					// create a group element
-					ulcontent += '<li class="'+this.options.class_group+'">'+$(this).attr("label")+'</li>';
+					ulcontent += '<li class="'+m.options.class_group+'">'+$(this).attr("label")+'</li>';
 					// and add its children
-					ulcontent += this._parseElements( $(this).html() );
+					ulcontent += m._parseElements( $(this).html() );
 				});
 			}
 			return ulcontent;
