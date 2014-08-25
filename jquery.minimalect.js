@@ -212,7 +212,7 @@
 			}
 
 			// poll the original for changes
-			if(op.live){
+			if(op.live && !op.ajax){
 				// set cache to the original value
 				var prevval = this.element.val();
 				// set a tight interval to check for the original
@@ -546,6 +546,9 @@
 
 			// if it's disabled, au revoir
 			if(ch.hasClass(this.options.class_disabled)) return false;
+			
+			if(!op.live)
+				this.items = this.wrapper.find('li');
 
 			// apply the selected class
 			if(!this.element.prop("multiple"))
