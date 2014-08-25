@@ -78,6 +78,9 @@
 
 			var op = this.options,
 				m = this;
+				
+			if(op.ajax)
+				op.live = false;
 
 			// create the wrapper
 			this.wrapper = $('<div class="'+op.class_container+'"></div>');
@@ -212,7 +215,7 @@
 			}
 
 			// poll the original for changes
-			if(op.live && !op.ajax){
+			if(op.live){
 				// set cache to the original value
 				var prevval = this.element.val();
 				// set a tight interval to check for the original
