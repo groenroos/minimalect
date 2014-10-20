@@ -548,9 +548,12 @@
 			if(ch.hasClass(this.options.class_disabled)) return false;
 
 			// apply the selected class
-			if(!this.element.prop("multiple"))
+			if(!this.element.prop("multiple")) {
 				this.items.removeClass(op.class_selected);
-			ch.addClass(op.class_selected);
+				ch.addClass(op.class_selected);
+			} else {
+				ch.toggleClass(op.class_selected);
+			}
 
 			this.items.filter("."+op.class_selected).each(function(){
 				vals.push($(this).data("value"));
