@@ -120,9 +120,15 @@
 			// toggle dropdown when you click on the dropdown itself
 			this.wrapper.on("click", function(e){
 				e.stopPropagation();
-				// only close the dropdown when it's not disabled and not multiselect
-				if(!m.element.prop("multiple") && !m.element.prop("disabled"))
-					m._toggleChoices()
+				if (!m.element.prop('disabled')) {
+					if (m.element.prop('multiple')) {
+						// if not disbaled and is multiselect, check state and what was clicked, hide/show as appropriate
+						(m.wrapper.hasClass(m.options.class_active) && $(e.target).is(':not(li)')) ? m._hideChoices(m.wrapper) : m._showChoices();
+					} else {
+						// toggle the dropdown when it's not disabled and not multiselect
+						m._toggleChoices();
+					}
+				}
 			});
 			// toggle dropdown when you click on the associated label, if present
 			this.label.on("click", function(e){ e.stopPropagation(); m.input.trigger('focus') });
