@@ -78,6 +78,9 @@
 
 			var op = this.options,
 				m = this;
+				
+			if(op.ajax)
+				op.live = false;
 
 			// create the wrapper
 			this.wrapper = $('<div class="'+op.class_container+'"></div>');
@@ -314,9 +317,9 @@
 				// parse each group separately
 				this.element.find("optgroup").each(function(){
 					// create a group element
-					ulcontent += '<li class="'+this.options.class_group+'">'+$(this).attr("label")+'</li>';
+					ulcontent += '<li class="'+m.options.class_group+'">'+$(this).attr("label")+'</li>';
 					// and add its children
-					ulcontent += this._parseElements( $(this).html() );
+					ulcontent += m._parseElements( $(this).html() );
 				});
 			}
 			return ulcontent;
@@ -546,6 +549,9 @@
 
 			// if it's disabled, au revoir
 			if(ch.hasClass(this.options.class_disabled)) return false;
+			
+			if(!op.live)
+				this.items = this.wrapper.find('li');
 
 			// apply the selected class
 			if(!this.element.prop("multiple"))
