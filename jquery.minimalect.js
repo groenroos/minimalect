@@ -205,6 +205,7 @@
 					if(mutations.length > 0){
 						// ...reparse the select
 						m.ul.html(m._parseSelect()+'<li class="'+op.class_empty+'">'+op.empty+'</li>');
+						m.items = m.wrapper.find('li');
 						if(m.options.debug) console.log("Minimalect detected a DOM change for ", m.element);
 					}
 				});
