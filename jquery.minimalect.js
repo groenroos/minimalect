@@ -358,34 +358,31 @@ module.exports = function(jQuery) {
 				}
 			},
 
-			// parse the entire select based on whether it has optgroups or not, and return the new markup
+			// parse the entire select and return the new markup
 			_parseSelect: function() {
 				var m = this, ulcontent = "";
-				if( !this.element.find("optgroup").length ) { // if we don't have groups
-					// just parse the elements regularly
-					ulcontent = this._parseElements( this.element.html() );
-				} else { // if we have groups
-					// parse each group separately
-					this.element.find("optgroup").each(function(){
-						// create a group element
-						ulcontent += '<li class="'+m.options.class_group+'">'+$(this).attr("label")+'</li>';
-						// and add its children
-						ulcontent += m._parseElements( $(this).html() );
-					});
-				}
+				ulcontent = this._parseElements( this.element.html() );
 				return ulcontent;
 			},
 
-			// turn option elements into li elements
-			// elhtml - HTML containing the options
+			// turn option elements and optgroup elements into li elements
+			// the runs recursively on the child elements of each optgroup
+			// elhtml - HTML containing the options and/or optgroups
 			_parseElements: function(elhtml) {
 				var m = this, readyhtml = "";
 				// go through each option
-				$( $.trim(elhtml) ).filter("option").each(function(){
+				$( $.trim(elhtml) ).filter("option, optgroup").each(function(){
 					var $el = $(this);
-					if ($el.attr('value') === '' && m.options.remove_empty_option) return;
-					// create an li with a data attribute containing its value
-					readyhtml += '<li data-value="'+$el.val().replace(/"/g, "&quot;")+'" class="'+($el.attr("class") || "")+($el.prop("disabled") ? " "+m.options.class_disabled : "")+'">'+$el.text()+'</li>';
+					if($el.is("optgroup")) {
+						// create a group element
+						readyhtml += '<li class="'+m.options.class_group+'">'+$(this).attr("label")+'</li>';
+						// and add its children
+						readyhtml += m._parseElements( $el.html() );
+					} else {
+						if ($el.attr('value') === '' && m.options.remove_empty_option) return;
+						// create an li with a data attribute containing its value
+						readyhtml += '<li data-value="'+$el.val().replace(/"/g, "&quot;")+'" class="'+($el.attr("class") || "")+($el.prop("disabled") ? " "+m.options.class_disabled : "")+'">'+$el.text()+'</li>';
+					}
 				});
 				// spit it out
 				return readyhtml;
