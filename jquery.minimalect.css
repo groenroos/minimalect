@@ -1,3 +1,17 @@
+/*********************************** 
+minimalect 
+Minimal select replacement for jQuery 
+
+jQuery 1.7+ required. 
+Developed by @groenroos 
+http://www.groenroos.fi 
+
+Github: git://github.com/groenroos/minimalect.git w 
+
+Licensed under the MIT license.
+
+************************************/
+
 /************************************
           MINIMALECT 0.9
   A minimalistic select replacement
@@ -171,12 +185,12 @@
 .minict_wrapper.bubble {
   -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.05);
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.05);
-  background: -moz-linear-gradient(top, white 0%, #f9f9f9 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, white), color-stop(100%, #f9f9f9));
-  background: -webkit-linear-gradient(top, white 0%, #f9f9f9 100%);
-  background: -o-linear-gradient(top, white 0%, #f9f9f9 100%);
-  background: -ms-linear-gradient(top, white 0%, #f9f9f9 100%);
-  background: linear-gradient(to bottom, white 0%, #f9f9f9 100%); }
+  background: -moz-linear-gradient(top, #ffffff 0%, #f9f9f9 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #f9f9f9));
+  background: -webkit-linear-gradient(top, #ffffff 0%, #f9f9f9 100%);
+  background: -o-linear-gradient(top, #ffffff 0%, #f9f9f9 100%);
+  background: -ms-linear-gradient(top, #ffffff 0%, #f9f9f9 100%);
+  background: linear-gradient(to bottom, #ffffff 0%, #f9f9f9 100%); }
   .minict_wrapper.bubble:hover {
     border-color: #dcdcdc; }
   .minict_wrapper.bubble:after {
@@ -220,3 +234,5 @@
       border-bottom-right-radius: 6px; }
   .minict_wrapper.bubble .minict_reset {
     width: 30px; }
+
+/*# sourceMappingURL=jquery.minimalect.css.map */
