@@ -216,6 +216,8 @@ pip-log.txt
 
 node_modules
 
+.sass-cache
+
 *.ipr
 *.iml
 *.iws
