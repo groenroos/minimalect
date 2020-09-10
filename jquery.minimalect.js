@@ -34,6 +34,7 @@
 
 		// classes
 		class_container: "minict_wrapper", // wrapper div for the element
+		class_dropdown: "minict_dropdown", // dropdown element
 		class_group: "minict_group", // list item for an optgroup
 		class_empty: "minict_empty", // "No results" message
 		class_active: "active", // applied to wrapper when the dropdown is displayed
@@ -107,7 +108,7 @@
 				this.reset = $('<a href="#" class="'+op.class_reset+'">&#215;</a>').appendTo(this.wrapper);
 
 			// parse the select itself, and create the dropdown markup
-			this.ul = $('<ul>'+this._parseSelect()+'<li class="'+op.class_empty+'">'+op.empty+'</li></ul>').appendTo(this.wrapper);
+			this.ul = $('<ul class="'+op.class_dropdown+'">'+this._parseSelect()+'<li class="'+op.class_empty+'">'+op.empty+'</li></ul>').appendTo(this.wrapper);
 			this.items = this.wrapper.find('li');
 			// if it's preselected, select the option itself as well
 			if(this.element.find("option[selected]").length) {
