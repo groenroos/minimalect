@@ -117,22 +117,22 @@
 
 			// BIND EVENTS
 			// hide dropdown when you click elsewhere
-			$(document).on("click", function(){ m._hideChoices(m.wrapper) });
+			$(document).on("click touch", function(){ m._hideChoices(m.wrapper) });
 			// hide dropdown when moving focus outside it
 			$("*").not(this.wrapper).not(this.wrapper.find('*')).on("focus", function(){ m._hideChoices(m.wrapper) });
 			// toggle dropdown when you click on the dropdown itself
-			this.wrapper.on("click", function(e){
+			this.wrapper.on("click touch", function(e){
 				e.stopPropagation();
 				// only close the dropdown when it's not disabled and not multiselect
 				if(!m.element.prop("multiple") && !m.element.prop("disabled"))
 					m._toggleChoices()
 			});
 			// toggle dropdown when you click on the associated label, if present
-			this.label.on("click", function(e){ e.stopPropagation(); m.input.trigger('focus') });
+			this.label.on("click touch", function(e){ e.stopPropagation(); m.input.trigger('focus') });
 			// select choice when you click on it
-			this.wrapper.on("click", "li:not(."+op.class_group+", ."+op.class_empty+", ."+op.class_disabled+")", function(){ m._selectChoice($(this)) });
+			this.wrapper.on("click touch", "li:not(."+op.class_group+", ."+op.class_empty+", ."+op.class_disabled+")", function(){ m._selectChoice($(this)) });
 			// stop the dropdown from closing when you click on a group or empty placeholder
-			this.wrapper.on("click", "li."+op.class_group+", li."+op.class_empty+", li."+op.class_disabled, function(e){
+			this.wrapper.on("click touch", "li."+op.class_group+", li."+op.class_empty+", li."+op.class_disabled, function(e){
 				e.stopPropagation();
 				m.input.focus();
 			});
@@ -147,7 +147,7 @@
 
 			// bind reset only if it's there
 			if(op.reset){
-				this.wrapper.on("click", "a."+op.class_reset, function(e){
+				this.wrapper.on("click touch", "a."+op.class_reset, function(e){
 					e.stopPropagation();
 					m._resetChoice();
 					return false;
@@ -155,7 +155,7 @@
 			}
 
 			// key bindings for the input element
-			this.input.on("focus click", function(e){
+			this.input.on("focus click touch", function(e){
 				e.stopPropagation();
 				if(!m.element.prop("disabled")) m._showChoices(); else m.input.blur();
 			}).on("keydown", function(e){
