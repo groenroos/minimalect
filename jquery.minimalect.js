@@ -93,13 +93,18 @@
 			if(this.element.prop("disabled"))
 				this.wrapper.addClass(op.class_disabled);
 
-			// create and add the input
-			this.input = $(
-				'<span '+
+		 	 var data_placeholder = (this.element.find("option[selected]").text() ||
+		                this.element.val() ? this.element.find("option[value=" + this.element.val() + "]").text() : null ||
+		                this.element.attr("placeholder") || (op.placeholder != null) ? op.placeholder : this.element.find("option:first").text());
+		
+	                var data_placeholder_html = this.element.find("option[selected]").html() || this.element.val() ? this.element.find("option[value=" + this.element.val() + "]").html() : null;
+	
+	                this.input = $(
+				'<span ' +
 				(op.searchable ? 'contenteditable="true"' : '') +
-				' data-placeholder="'+(this.element.find("option[selected]").text() || this.element.attr("placeholder") || (op.placeholder != null) ? op.placeholder : this.element.find("option:first").text())+
-				'" '+ (this.element.is('[tabindex]') ? ('tabindex='+this.element.attr('tabindex')) : '') +'>'+
-				(this.element.find("option[selected]").html() || "")+
+				' data-placeholder="' + data_placeholder +
+				'" ' + (this.element.is('[tabindex]') ? ('tabindex=' + this.element.attr('tabindex')) : '') + '>' +
+				(data_placeholder_html || "") +
 				'</span>'
 			).appendTo(this.wrapper);
 
