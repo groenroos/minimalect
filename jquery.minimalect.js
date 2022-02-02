@@ -97,7 +97,7 @@
 			this.input = $(
 				'<span '+
 				(op.searchable ? 'contenteditable="true"' : '') +
-				' data-placeholder="'+(this.element.find("option[selected]").text() || this.element.attr("placeholder") || (op.placeholder != null) ? op.placeholder : this.element.find("option:first").text())+
+				' data-placeholder="'+(this.element.find("option[selected]").text() || this.element.attr("placeholder") || ((op.placeholder != null) ? op.placeholder : this.element.find("option:first").text()))+
 				'" '+ (this.element.is('[tabindex]') ? ('tabindex='+this.element.attr('tabindex')) : '') +'>'+
 				(this.element.find("option[selected]").html() || "")+
 				'</span>'
